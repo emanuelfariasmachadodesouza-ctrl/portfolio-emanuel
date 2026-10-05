@@ -9,6 +9,7 @@ import {
   Send,
 } from "lucide-react"
 import { profile } from "@/data/profile"
+import { supabase } from "@/lib/supabase"
 import {
   Anchor,
   Button,
@@ -24,12 +25,28 @@ export default function Contact() {
     useState<"idle" | "loading" | "success" | "error">("idle")
   const [copied, setCopied] = useState(false)
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const form = event.currentTarget
     if (!form.checkValidity()) return
+    if (!supabase) {
+      setStatus("error")
+      return
+    }
     setStatus("loading")
-    window.setTimeout(() => setStatus("success"), 700)
+    const data = new FormData(form)
+    const { error } = await supabase.from("leads").insert({
+      nome: String(data.get("name")),
+      email: String(data.get("email")),
+      assunto: String(data.get("subject")),
+      mensagem: String(data.get("message")),
+    })
+    if (error) {
+      setStatus("error")
+      return
+    }
+    setStatus("success")
+    form.reset()
   }
   const copyEmail = async () => {
     await navigator.clipboard.writeText(profile.email)
@@ -47,7 +64,7 @@ export default function Contact() {
           <SectionHeading
             eyebrow="07 / Contato"
             title="Tem uma ideia? Vamos torná-la real."
-            description="Conte um pouco sobre o desafio. O formulário funciona em modo demonstrativo até a integração com Supabase ser configurada."
+            description="Conte um pouco sobre o desafio. Preencha o formulário e eu respondo o mais breve possível."
           />
         </Reveal>
         <div className="grid gap-6 lg:grid-cols-[.8fr_1.2fr]">
@@ -119,12 +136,16 @@ export default function Contact() {
               </label>
               {status === "success" && (
                 <p className="success-message" role="status">
-                  <Check size={16} /> Mensagem validada. Configure o Supabase
-                  para realizar o envio.
+                  <Check size={16} /> Mensagem enviada! Obrigado pelo contato.
+                </p>
+              )}
+              {status === "error" && (
+                <p className="text-sm text-red-500" role="alert">
+                  Não foi possível enviar. Tente novamente.
                 </p>
               )}
               <Button type="submit" disabled={status === "loading"}>
-                {status === "loading" ? "Validando..." : "Enviar mensagem"}{" "}
+                {status === "loading" ? "Enviando..." : "Enviar mensagem"}{" "}
                 <Send size={16} />
               </Button>
             </form>
