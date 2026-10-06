@@ -1,18 +1,18 @@
 export const profile = {
-  name: "[SEU NOME]",
-  initials: "SN",
+  name: "Emanuel Farias",
+  initials: "EF",
   role: "Desenvolvedor Full Stack",
   eyebrow: "Estudante & desenvolvedor",
   description:
     "Transformando ideias em experiências digitais, sistemas e projetos reais.",
   photo: "/profile/foto.jpg",
-  email: "[SEU EMAIL]",
-  github: "https://github.com/SEU-USUARIO",
-  linkedin: "https://linkedin.com/in/SEU-USUARIO",
-  instagram: "https://instagram.com/SEU-USUARIO",
-  whatsapp: "https://wa.me/SEU-WHATSAPP",
+  email: "emanuelfariasmachadosesouza@gmail.com",
+  github: "https://github.com/emanuelfariasmachadodesouza-ctrl",
+  linkedin: "https://www.linkedin.com/in/emanuel-farias-machado-de-souza-588012435/",
+  instagram: "https://instagram.com/m.a.n.e.l.0.0.7",
+  whatsapp: "https://wa.me/5533984181008",
   nexbit: "#",
-  location: "[SUA LOCALIZAÇÃO]",
+  location: "Carlos Chagas, MG",
 } as const
 
 export const navItems = [
